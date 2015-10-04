@@ -1,0 +1,46 @@
+/* All pixel values refer to screen width */
+
+.homer {
+  width: 165px;
+  height: 125px;
+}
+
+/* Greater than 1200 pixels */
+@media only screen and (min-width: 1201px) {
+  	.homer { background: url("homer.jpg") 0px 0px; }
+}
+
+/* Greater than 1100 pixels but less than or equal to 1200 pixels */
+@media only screen and (min-width: 1101px) and (max-width: 1200px) { 
+  	.homer { background: url("homer.jpg") -165px 0px; }
+}
+
+/* Greater than 1000 pixels but less than or equal to 1100 pixels */
+@media screen and (min-width: 1001px) and (max-width: 1200px) {
+  	.homer { background: url("homer.jpg") 0px -125px; }
+}
+
+/* Greater than 900 pixels but less than or equal to 1000 pixels */
+@media screen and (min-width: 901px) and (max-width: 1000px) {
+  	.homer { background: url("homer.jpg") -165px -125px; }
+}
+
+/* Greater than 800 pixels but less than or equal to 900 pixels */
+@media screen and (min-width: 801px) and (max-width: 900px) {
+  	.homer { background: url("homer.jpg") 0px -250px; }
+}
+
+/* Greater than 700 pixels but less than or equal to 800 pixels */
+@media screen and (min-width: 701px) and (max-width: 800px) {
+  	.homer { background: url("homer.jpg") -165px -250px; }
+}
+
+/* Greater than 600 pixels but less than or equal to 700 pixels */
+@media screen and (min-width: 601px) and (max-width: 700px) {   
+  	.homer { background: url("homer.jpg") 0px -375px; }
+}
+
+/* Less than or equal to 600 pixels */
+@media screen and (max-width: 600px) {
+  	.homer { background: url("homer.jpg") -165px -375px; }
+}
