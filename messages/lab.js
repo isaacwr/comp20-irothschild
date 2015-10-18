@@ -5,16 +5,13 @@ function saveData() {
 	blob = this.responseTest;
 }
 
-
-var xhr = new XMLHttpRequest();
-xhr.addEventListener("load", saveData);
-xhr.open("GET", "data.json");
-xhr.send();
-
 function parse() {
+	var xhr = new XMLHttpRequest();
+	xhr.addEventListener("load", saveData);
+	xhr.open("GET", "data.json");
+	xhr.send();
 	console.log(blob);	
 }
-console.log(blob);
 
 /*
 for each id in blob
