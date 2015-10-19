@@ -13,8 +13,9 @@ function parse() {
 	xhr.send();
 };
 
-
+confirm("outside for loop");
 for (i=0; i < blob.length; i++) {
+	confirm("in for loop");
 	text = blob[0];
-	alert(text);
+	confirm(text);
 }
