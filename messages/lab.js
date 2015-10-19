@@ -14,8 +14,7 @@ function parse() {
 };
 
 
-for (var key in blob) {
-	if (blob.hasOwnProperty(key)) {
-    	alert(key + " -> " + blob[key]);
-  }
-};
+for (i=0; i < blob.length; i++) {
+	text = blob[0];
+	alert(text);
+}
