@@ -3,7 +3,7 @@
 var blob = "";
 function saveData() {
 	blob = JSON.parse(this.responseTest);
-	alert(blob));
+	alert(blob);
 }
 
 function parse() {
