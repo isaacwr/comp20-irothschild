@@ -2,8 +2,7 @@
 
 var blob = "";
 function saveData() {
-	alert(this.responseText);
-	blob = JSON.parse(this.responseText);
+	blob = this.responseText;
 	alert(blob);
 }
 
@@ -12,12 +11,17 @@ function parse() {
 	xhr.addEventListener("load", saveData);
 	xhr.open("GET", "data.json");
 	xhr.send();
-	//alert(blob);	
 };
 
 
 for (var key in blob) {
 	if (blob.hasOwnProperty(key)) {
-    alert(key + " -> " + blob[key]);
+    	alert(key + " -> " + blob[key]);
   }
+}
+
+for (var key, val in blob) {
+	if (blob.hasOwnPorperty(key)) {
+		alert(key + " -> " + val);
+	}
 }
