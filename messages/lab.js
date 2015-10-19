@@ -2,6 +2,7 @@
 
 var blob = "";
 function saveData() {
+	alert(this.responseText);
 	blob = JSON.parse(this.responseText);
 	alert(blob);
 }
