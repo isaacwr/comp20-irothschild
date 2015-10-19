@@ -10,7 +10,7 @@ function parse() {
 	xhr.addEventListener("load", saveData);
 	xhr.open("GET", "data.json");
 	xhr.send();
-	console.log(blob);	
+	alert(blob);	
 };
 
 /*
