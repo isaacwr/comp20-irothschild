@@ -15,13 +15,8 @@ function parse() {
 };
 
 
-for(var key in blob) {
+for (var key in blob) {
 	if (blob.hasOwnProperty(key)) {
     alert(key + " -> " + blob[key]);
   }
 }
-
-/*
-for each id in blob
-	add message and username to messages innerHTML
-*/
