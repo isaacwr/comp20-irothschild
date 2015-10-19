@@ -11,7 +11,7 @@ function parse() {
 	xhr.open("GET", "data.json");
 	xhr.send();
 	console.log(blob);	
-}
+};
 
 /*
 for each id in blob
