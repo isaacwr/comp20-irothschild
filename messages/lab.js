@@ -3,6 +3,7 @@
 var blob = "";
 function saveData() {
 	blob = this.responseTest;
+	alert(blob))
 }
 
 function parse() {
@@ -10,7 +11,7 @@ function parse() {
 	xhr.addEventListener("load", saveData);
 	xhr.open("GET", "data.json");
 	xhr.send();
-	alert(blob);	
+	//alert(blob);	
 };
 
 /*
