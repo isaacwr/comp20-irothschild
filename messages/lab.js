@@ -18,10 +18,4 @@ for (var key in blob) {
 	if (blob.hasOwnProperty(key)) {
     	alert(key + " -> " + blob[key]);
   }
-}
-
-for (var key, val in blob) {
-	if (blob.hasOwnPorperty(key)) {
-		alert(key + " -> " + val);
-	}
-}
+};
