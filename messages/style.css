@@ -1,10 +1,15 @@
 /* Your CSS here... */
+.body {
+	font-family: Helvetica;
+}
+.h1 {
+	font-size: 55px;
+}
 
 #messages {
-	font-family: Helvetica;
+	border: 10;
 	font-size: 32px;
 	border-radius: 10;
-	border-width: 5;
 	border-color: #FFFFFF;
 	background-color: #0099FF;
 }
