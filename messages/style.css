@@ -1,7 +1,7 @@
 /* Your CSS here... */
 .body {
 	font-family: Helvetica;
-}
+
 .h1 {
 	font-size: 55px;
 }
@@ -16,4 +16,5 @@
 
 #author {
 	font-size: 24px;
+}
 }
