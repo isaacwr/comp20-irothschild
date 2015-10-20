@@ -3,9 +3,10 @@
 #messages {
 	font-family: Helvetica;
 	font-size: 32px;
-	border-radius: 5;
-	border-width: 0;
-	background-color: #0000AA;
+	border-radius: 10;
+	border-width: 5;
+	border-color: #FFFFFF;
+	background-color: #0099FF;
 }
 
 #author {
