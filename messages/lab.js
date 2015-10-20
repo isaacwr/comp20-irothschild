@@ -6,7 +6,6 @@ function saveData() {
 	for (i=0; i < blob.length; i++) {
 		text = blob[i];
 		message = "<p>"+text["id"]+". "+ text["content"]+"<span id='author'>    -"+text["username"]+"</span></p>";
-		alert(message);
 		document.getElementById("messages").innerHTML += message;
 	}
 }
