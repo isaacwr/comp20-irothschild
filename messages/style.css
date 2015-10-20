@@ -1,5 +1,5 @@
 /* CSS Definition for Messages Lab */
-.h1 {
+body .h1 {
 	font-family: Helvetica;
 	font-size: 55px;
 }
@@ -7,7 +7,7 @@
 #messages .p {
 	font-family: helvetica;
 	font-size: 32px;
-	border: 10em;
+	border: 10px;
 	border-radius: 10;
 	border-color: #FFFFFF;
 	background-color: #0099FF;
