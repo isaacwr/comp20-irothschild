@@ -5,10 +5,10 @@ body .h1 {
 }
 
 #messages .p {
-	font-family: helvetica;
+	font-family: Helvetica;
 	font-size: 32px;
 	border: 10px;
-	border-radius: 10;
+	border-radius: 10px;
 	border-color: #FFFFFF;
 	background-color: #0099FF;
 }
