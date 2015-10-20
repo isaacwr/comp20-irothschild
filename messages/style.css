@@ -1,1 +1,18 @@
-/* Your CSS here... */
+/* CSS Definition for Messages Lab */
+.h1 {
+	font-family: Helvetica;
+	font-size: 55px;
+}
+
+#messages {
+	font-family: Helvetica;
+	font-size: 32px;
+	border: 2em;
+	border-radius: 10px;
+	border-color: #FFFFFF;
+	background-color: #0099FF;
+}
+
+#author {
+	font-size: 24px;
+}
