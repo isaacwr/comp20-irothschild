@@ -1,11 +1,11 @@
 /* Your CSS here... */
 
-#messages {
-	background-color: #AAAAFF;
+.p {
 	font-family: Helvetica;
 	font-size: 32px;
 	border-radius: 5;
 	border-width: 0;
+	background-color: #0000AA;
 }
 
 #author {
