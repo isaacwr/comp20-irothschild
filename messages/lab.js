@@ -2,7 +2,7 @@
 
 var blob = "";
 function saveData() {
-	blob = this.responseText;
+	blob = JSON.parse(this.responseText);
 }
 
 function parse() {
@@ -12,21 +12,8 @@ function parse() {
 	xhr.send();
 };
 
-confirm("outside for loop");
 for (i=0; i < blob.length; i++) {
-	confirm("in for loop");
-	text = blob[0];
-	jsn = JSON.parse(text);
-	alert(text);
-	alert(jsn);
-}
-
-a = JSON.parse(blob);
-confirm("outisde second for loop");
-for (i=0; i < a.length; i++) {
-	confirm("in second for loop");
-	text = a[0];
-	jsn = JSON.parse(text);
-	alert(text);
-	alert(jsn);
+	text = blob[i];
+	message = "<p>"+text["id"]+text["content"]+"<span id='author'>"+text["username"]+"</span></p>";
+	document.getElementById("messages").innerHTML += message;
 }
