@@ -1,13 +1,11 @@
-/* Your CSS here... */
-.body {
-	font-family: Helvetica;
-}
-
+/* CSS Definition for Messages Lab */
 .h1 {
+	font-family: Helvetica;
 	font-size: 55px;
 }
 
-#messages {
+#messages .p {
+	font-family: helvetica;
 	font-size: 32px;
 	border: 10em;
 	border-radius: 10;
