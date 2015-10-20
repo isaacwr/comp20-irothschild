@@ -7,15 +7,12 @@
 	font-size: 55px;
 }
 
-.p {
-	border: 10px;
+#messages {
+	font-size: 32px;
+	border: 10em;
 	border-radius: 10;
 	border-color: #FFFFFF;
 	background-color: #0099FF;
-}
-
-#messages {
-	font-size: 32px;
 }
 
 #author {
