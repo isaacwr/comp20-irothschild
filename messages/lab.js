@@ -3,6 +3,12 @@
 var blob = "";
 function saveData() {
 	blob = JSON.parse(this.responseText);
+	for (i=0; i < blob.length; i++) {
+		text = blob[i];
+		message = "<p>"+text["id"]+". "+ text["content"]+"<span id='author'>    -"+text["username"]+"</span></p>";
+		alert(message);
+		document.getElementById("messages").innerHTML += message;
+	}
 }
 
 function parse() {
@@ -11,11 +17,3 @@ function parse() {
 	xhr.open("GET", "data.json");
 	xhr.send();
 };
-
-alert("ahead of for loop");
-for (i=0; i < blob.length; i++) {
-	text = blob[i];
-	message = "<p>"+text["id"]+". "+ text["content"]+"<span id='author'>    -"+text["username"]+"</span></p>";
-	alert(message);
-	document.getElementById("messages").innerHTML += message;
-}
