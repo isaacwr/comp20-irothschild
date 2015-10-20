@@ -4,20 +4,11 @@
 	font-size: 55px;
 }
 
-/*#messages {
-	font-family: Helvetica;
-	font-size: 32px;
-	border: 4em;
-	border-radius: 30px;
-	border-color: #FFFFFF;
-	background-color: #0099FF;
-}*/
-
-.p {
+#messages {
 	font-family: Helvetica;
 	font-size: 32px;
 	border: 2em;
-	border-radius: 15px;
+	border-radius: 10px;
 	border-color: #FFFFFF;
 	background-color: #0099FF;
 }
