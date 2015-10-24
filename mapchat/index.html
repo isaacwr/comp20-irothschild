@@ -27,21 +27,22 @@
                     map.addListener("tilesloaded", function() {
                         var marker = new google.maps.Marker({
                             position: myPos,
-                            title: "This is home"
+                            title: "Username: cant find email....?" +
+                                   "\nLattude: "+myPos.lat() + 
+                                   "\nLongitude: "+myPos.lon()
                         });
                         marker.setMap(map);
+                        var infowindow = new google.maps.InfoWindow();
+                        google.maps.event.addListener(marker, 'click', function() {
+                            infowindow.setContent(marker.title);
+                            infowindow.open(map, marker);
+                        });
                     });
                 });
             } else {
                 alert("Geolocation is not supported by your web browser... :(");
             }
         }
-
-        google.maps.event.addListener(marker, 'click', function() {
-                    infowindow.setContent(marker.title);
-                    infowindow.open(map, marker);
-                });
-
     </script>
 </body>
 </html>
