@@ -25,12 +25,14 @@
                                  lng: myPos.lng()},
                         zoom: 14
                     });
+                    map.addEventListener("load", function() {
+                        var marker = new google.maps.Marker({
+                            position: myPos,
+                            title: "This is home"
+                            marker.setMap(map);
+                        });
+                    });
                 });
-                var marker = new google.maps.Marker({
-                    position: myPos,
-                    title: "This is home"
-                });
-                marker.setMap(map);
             } else {
                 alert("Geolocation is not supported by your web browser... :(");
             }
