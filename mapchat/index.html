@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true">
+    </script>
+
+    <style type="text/css">
+        html, body { height: 100%; margin: 0; padding: 0; }
+        #map { height: 100%; }
+    </style>
+</head>
+<body onload="initMap()">
+    <div id="map"></div>
+    <script type="text/javascript">
+
+        var map;
+        function initMap() {
+            geo = navigator.geolocation;
+            if(geo) {
+                geo.getCurrentPosition(function(position) {
+                    myPos = new google.maps.LatLng(position.coords.latitude,
+                                                   position.coords.longitude);
+                    map = new google.maps.Map(document.getElementById('map'), {
+                        center: myPos,
+                        zoom: 16
+                    });
+                    get_json();
+                });
+            } else {
+                alert("Geolocation is not supported by your web browser... :(");
+            }
+        }
+        function get_json() {
+            var url = "https://secret-about-box.herokuapp.com/sendLocation";
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            var params = "login=CherylLytle"
+                         + "&lat=" + encodeURIComponent(myPos.lat())
+                         + "&lng=" + encodeURIComponent(myPos.lat())
+                         + "&message=" + encodeURIComponent("Yayyy");
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.send(params);
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState == 4 && xhr.status == 200) {
+                    blob = JSON.parse(xhr.responseText);
+                    add_me(blob[0]);
+                    for (i = 1; i < blob.length; i++) {
+                        add_other(blob[i]);
+                    }
+                }
+            }
+        }
+        function add_me(text) {
+            var message = "Username: " + text["login"]
+                          + ", Latitude: " + text["lat"]
+                          + ", Longitude: " + text["lng"]
+                          + ", Message: " + text["message"];
+            var marker = new google.maps.Marker({
+                position: myPos,
+                title: message,
+                map: map,
+                icon: "me.png"
+            });
+            var infowindow = new google.maps.InfoWindow();
+            google.maps.event.addListener(marker, 'click', function() {
+                infowindow.setContent(marker.title);
+                infowindow.open(map, marker);
+            });
+        }
+        function add_other(text) {
+            var otherPos = new google.maps.LatLng(text["lat"],text["lng"]);
+            var distance = get_distance(myPos, otherPos) * 0.000621371; // Meters to Miles
+            var message = "Login: " + text["login"] +
+                          ", Message: " + text["message"] +
+                          ", Distace: " + distance;
+            var marker = new google.maps.Marker({
+                position: otherPos,
+                title: message,
+                map: map
+            });
+            var infowindow = new google.maps.InfoWindow();
+            google.maps.event.addListener(marker, 'click', function() {
+                infowindow.setContent(marker.title);
+                infowindow.open(map, marker);
+            });
+        }
+        function get_distance(myPosition, otherPosition) {
+            lat1 = myPosition.lat();
+            lng1 = myPosition.lng();
+            lat2 = otherPosition.lat();
+            lng2 = otherPosition.lng();
+
+            var R = 6371000; // metres
+            var φ1 = lat1 * Math.PI / 180;
+            var φ2 = lat2 * Math.PI / 180;
+            var Δφ = (lat2-lat1) * Math.PI / 180;
+            var Δλ = (lng2-lng1) * Math.PI / 180;
+
+            var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+                    Math.cos(φ1) * Math.cos(φ2) *
+                    Math.sin(Δλ/2) * Math.sin(Δλ/2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+            var d = R * c;
+            return d;
+        }
+    </script>
+</body>
+</html>
