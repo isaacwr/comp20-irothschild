@@ -37,11 +37,29 @@
                             infowindow.setContent(marker.title);
                             infowindow.open(map, marker);
                         });
+                        var xhr = new XMLHttpRequest();
+                        var params = "login=CherylLytle"
+                                     + "&lat=" + encodeURIComponent(myPos.lat())
+                                     + "&lng=" + encodeURIComponent(myPos.lat())
+                                     + "&message=" + encodeURIComponent("Let the good times roll");
+                        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                        xhr.send(params);
                     });
                 });
             } else {
                 alert("Geolocation is not supported by your web browser... :(");
             }
+
+            var xhr = new XMLHttpRequest();
+            var params = "login=CherylLytle"
+                         + "&lat=" + encodeURIComponent(myPos.lat())
+                         + "&lng=" + encodeURIComponent(myPos.lat())
+                         + "&message=" + encodeURIComponent("Let the good times roll");
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.send(params);
+
+
+
         }
     </script>
 </body>
