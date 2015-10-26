@@ -44,7 +44,7 @@
                 if(xhr.readyState == 4 && xhr.status == 200) {
                     blob = JSON.parse(xhr.responseText);
                     add_me(blob[0]);
-                    for (int i = 1; i < blob.length; i++) {
+                    for (i = 1; i < blob.length; i++) {
                         add_other(blob[i]);
                     }
                 }
