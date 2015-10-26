@@ -68,7 +68,7 @@
         }
         function add_other(text) {
             var otherPos = new google.maps.LatLng(text["lat"],text["lng"]);
-            var distance = get_distance(myPos, otherPos);
+            var distance = get_distance(myPos, otherPos) * 0.000621371; // Meters to Miles
             var message = "login:" + text["login"] +
                           ", message: " + text["message"] +
                           ", distace: " + distance;
