@@ -70,7 +70,7 @@
         function add_other(text) {
             var otherPos = new google.maps.LatLng(text["lat"],text["lng"]);
             var distance = get_distance(myPos, otherPos) * 0.000621371; // Meters to Miles
-            var message = "Login:" + text["login"] +
+            var message = "Login: " + text["login"] +
                           ", Message: " + text["message"] +
                           ", Distace: " + distance;
             var marker = new google.maps.Marker({
