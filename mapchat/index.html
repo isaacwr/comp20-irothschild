@@ -53,7 +53,8 @@
         function add_me(text) {
             var message = "Username: " + text["login"]
                           + ", Latitude: " + text["lat"]
-                          + ", Longitude: " + text["lng"];
+                          + ", Longitude: " + text["lng"]
+                          + ", Message: " + text["message"];
             var marker = new google.maps.Marker({
                 position: myPos,
                 title: message,
@@ -69,9 +70,9 @@
         function add_other(text) {
             var otherPos = new google.maps.LatLng(text["lat"],text["lng"]);
             var distance = get_distance(myPos, otherPos) * 0.000621371; // Meters to Miles
-            var message = "login:" + text["login"] +
-                          ", message: " + text["message"] +
-                          ", distace: " + distance;
+            var message = "Login:" + text["login"] +
+                          ", Message: " + text["message"] +
+                          ", Distace: " + distance;
             var marker = new google.maps.Marker({
                 position: otherPos,
                 title: message,
