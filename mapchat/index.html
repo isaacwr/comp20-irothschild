@@ -24,41 +24,83 @@
                         center: myPos,
                         zoom: 16
                     });
-                    map.addListener("tilesloaded", function() {
-                        var marker = new google.maps.Marker({
-                            position: myPos,
-                            title: "Username: CherylLytle" +
-                                   ", Lattude: " + myPos.lat() + 
-                                   ", Longitude: " + myPos.lng()
-                        });
-                        marker.setMap(map);
-                        var infowindow = new google.maps.InfoWindow();
-                        google.maps.event.addListener(marker, 'click', function() {
-                            infowindow.setContent(marker.title);
-                            infowindow.open(map, marker);
-                        });
-                        var url = "https://secret-about-box.herokuapp.com/sendLocation";
-                        var xhr = new XMLHttpRequest();
-                        xhr.open("POST", url, true);
-                        var params = "login=CherylLytle"
-                                     + "&lat=" + encodeURIComponent(myPos.lat())
-                                     + "&lng=" + encodeURIComponent(myPos.lat())
-                                     + "&message=" + encodeURIComponent("Let the good times roll");
-                        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                        xhr.send(params);
-                        xhr.onreadystatechange = function() {//Call a function when the state changes.
-                            if(xhr.readyState == 4 && xhr.status == 200) {
-                                alert(xhr.responseText);
-                            }
-                        };
-                    });
+                    get_json();
                 });
             } else {
                 alert("Geolocation is not supported by your web browser... :(");
             }
+        }
+        function get_json() {
+            var url = "https://secret-about-box.herokuapp.com/sendLocation";
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            var params = "login=CherylLytle"
+                         + "&lat=" + encodeURIComponent(myPos.lat())
+                         + "&lng=" + encodeURIComponent(myPos.lat())
+                         + "&message=" + encodeURIComponent("Let the good times roll");
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.send(params);
+            xhr.onreadystatechange = function() {//Call a function when the state changes.
+                if(xhr.readyState == 4 && xhr.status == 200) {
+                    blob = JSON.parse(xhr.responseText);
+                    add_me(blob[0]);
+                    for (int i = 1; i < blob.length; i++) {
+                        add_other(blob[i]);
+                    }
+                }
+            }
+        }
+        function add_me(text) {
+            var message = "Username: " + text["login"]
+                          + ", Latitude: " + text["lat"]
+                          + ", Longitude: " + text["lng"];
+            var marker = new google.maps.Marker({
+                position: myPos,
+                title: message,
+                map: map,
+                icon: "me.png"
+            });
+            var infowindow = new google.maps.InfoWindow();
+            google.maps.event.addListener(marker, 'click', function() {
+                infowindow.setContent(marker.title);
+                infowindow.open(map, marker);
+            });
+        }
+        function add_other(text) {
+            var otherPos = new google.maps.LatLng(text["lat"],text["lng"]);
+            var distance = get_distance(myPos, otherPos);
+            var message = "login:" + text["login"] +
+                          ", message: " + text["message"] +
+                          ", distace: " + distance;
+            var marker = new google.maps.Marker({
+                position: otherPos,
+                title: message.
+                map: map
+            });
+            var infowindow = new google.maps.InfoWindow();
+            google.maps.event.addListener(marker, 'click', function() {
+                infowindow.setContent(marker.title);
+                infowindow.open(map, marker);
+            });
+        }
+        function get_distance(myPosition, otherPosition) {
+            lat1 = myPosition.lat();
+            lng1 = myPosition.lng();
+            lat2 = otherPosition.lat();
+            lat2 = otherPosition.lng();
 
+            var R = 6371000; // metres
+            var φ1 = lat1.toRadians();
+            var φ2 = lat2.toRadians();
+            var Δφ = (lat2-lat1).toRadians();
+            var Δλ = (lon2-lon1).toRadians();
 
+            var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+                    Math.cos(φ1) * Math.cos(φ2) *
+                    Math.sin(Δλ/2) * Math.sin(Δλ/2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
+            var d = R * c;
         }
     </script>
 </body>
