@@ -8,28 +8,22 @@
 	<script>
 		if(typeof(Storage) !== "undefined") {
 			var ls = window.localStorage;
-			function checkVariable() {
-   				if(ls==true){
-					for (i = 0; i < ls.length; i++) {
-				   		var entry = ls.getItem(ls.key(i));
-				   		$("#log").prepend("<p>"+entry+"</p>");
-					}
-				}
-		 	}
-		 	setTimeout(checkVariable,1000);
-		 	$("body").onload= function() {
+
+			$(function() {
+				console.log("In load event");
 				for (i = 0; i < ls.length; i++) {
-			   		var entry = ls.getItem(ls.key(i));
-			   		$("#log").prepend("<p>"+entry+"</p>");
+					var entry = ls.getItem(ls.key(i));
+					$("#log").prepend("<p>"+entry+"</p>");
 				}
-		 	};
+			});
+			
 			window.onkeyup = function(e) {
 				var key = e.keyCode ? e.keyCode : e.which;
 			   	if (key == 13) {
 			   		var input = $("#msg").val()
 			   		if (input.length > 0) {
-						ls.setItem(ls.length, new Date()+" - "+input);
-						var entry = ls.getItem(ls.key(ls.length-1));
+			   			var entry = new Date() + " - " + input;
+						ls.setItem(ls.length, entry);
 			   			$("#log").prepend("<p>"+entry+"</p>");
 			   			$("#msg").select();
 			   		}
