@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Assignment 4: MapChat Security Review</title>
+	<meta charset="UTF-8">
+</head>
+<body>
+	<h1>Mapchat Security Review</h1>
+	<p>Isaac Rothschild | December 2015</p>
+	<br><hr><br>
+	<h3>Introduction</h3>
+	<p>This document reviews the security of the Mapchat application built by Ming Chow to demonstrate Comp20 Assignments 2 and 3.</p>
+	<p>Assignment 2 defines MapChat as a service that "retrieves your current location and sends your current location with a message to a datastore" and then "retrieves and displays the locations and messages of people in the class on the map". So in this case, a user would log onto their MapChat client and then see a Google Maps basemap with pins representing their classmates in Comp20, as well as a special pin or icon for their own location. Assignment 2 specifies the client and Assignment 3 specifies the server.</p>
+	<p>The client's only responsibility is to get the user's location using the <code>navigator.geolocation</code> object and to send it the <code>/sendLocation</code> API implemented in Assignment 3.</p>
+	<p>Assigment 3 specifies two different APIs for the MapChat server. The first and largest is the <code>POST /sendLocation</code> API which is take input from the client side of MapChat and returns the location and message of every previous user to have sent their location to the MapChat server. Second, the server implemented the <code>GET /latest.json</code> API, which took a username as input and returned the last location and message that that username recoreded in the MapChat server.</p>
+	<br>
+	<p>My goal here is to interrupt as much as I can of this MapChat application by exploiting vulnerablilites in its code, primarily due to insufficient user input sanitation. </p>
+	<br><hr><br>
+	<h3>Methodology</h3>
+	<p>For the most part, I carried the attacks "black-box", by just trying to introduce malicious code fragments using <code>curl</code> and <code>Tamper Data for Firefox</code>. After completeing these tests and recording my observations, I reviewed the code to look for any other vulnerabilities or crash points.</p>
+	<br><hr><br>
+	<h3>Abstract of Findings</h3>
+	<p>In both 1980 and 2015, XSS and Database Injection rank among the top vulnerabilites in web design. That theme is apparent here as nearly all weaknesses in this MapChat app were sourced in an ungrounded faith in user input. The application assumes valid input at every stage and so benevolent hackers can leave false data, and malicous hackers can inject damaging scripts or steal other users data.</p>
+	<br><hr><br>
+	<h3>Issues Found</h3>
+	<ul>
+		<li><h1>1. Cross-Site Scripting</h1>
+			<ul>
+			<li> <strong>Affects:</strong> <code>POST /sendLocation API</code></li>
+			<li> <strong>Severity: Critical.</strong> Hands down the largest security vulnerability present. Because the server does not make any effort to sanitize the user input from the <code>message</code> block of the <code>/sendLocation</code> request before rendering it on a webpage, attackers are able to pass malicious scripts into the <code>message</code> field and have them run once the messages are loaded onto the screen. These scripts can range from the very mild, like changing the color of the text on a webpage, to the annoying, like redirecting to a Youtube video, and to the dangerous, where a script can read and return the entire contents of a database to the attacker or even shut the website down completely.</li>
+			<li> <strong>Description:</strong> Lets attackers post scripts and other malware by placing the script in the <code>message</code> block of the API request. This is a very common vulnerability for simple web apps that utilize user input and so was the first vulnerability I tested for.</li>
+			<li> <strong>Proof:</strong> Just for fun, I decided to redirect the app to a great Youtube video of Manchester United playing soccer. I used the curl request: </li>
+			<li><img src="XSS_curl_attack.png" alt="XSS curl attack" height="50"></li>
+			<li> This means that when a user accesses the client page for the Mapchat app, the page is automatically redirected to Youtube:</li>
+			<li><img src="XSS_attack.png" alt="Manchester United Lose 4-1 to Liverpool at Old Trafford" width="500"></li>
+			<li> <strong>Resolution:</strong> Thankfully there is an easy solution. A browser knows how to interpret JavaScript and HTML because of the prescence of tags, so if the author of the server were to run the user input through a RegExp function that would either pull out all matching tags, or would invalidate the message and instead store the message "Sorry but this message has been removed.", then the server could be protected from these attacks.</li>
+			</ul>
+		</li>
+		<li><h1>2. Allow arbitrary Checkins</h1>
+			<ul>
+			<li> <strong>Affects:</strong> <code>POST /sendLocation API</code></li>
+			<li> <strong>Severity: Medium.</strong> The Mapchat server assumes that the coordinates being send by the client are the correct coordinates. This is not entirely considered user input (the coordinates are auto-generated by the client), and so at first doesn't seem to be huge concern. However, because tools like <code>Tamper Data for Firefox</code> allow users to modify requests mid transaction, there is no way the server can be sure of the coordinates correctness. This issue doesn't break the site or open it up to attacks, but it does undermine the credibility and truthfullness of the app's data and results, and that is harful in and of itself.</li>
+			<li> <strong>Description:</strong> Lets users post false data to the database using <code>Tamper Data for Firefox</code> or <code>curl</code> to give themselves a fake location. To use <code>Tamper Data for Firefox</code>, the user would have to open up the tool in a Firefox window and then intercept the request and change the <code>lat</code> and <code>lng</code> in the original request to whatever numbers the user would like. If the user is performing the attack via <code>curl</code>, then all the user needs to do is put any numbers between -90 and 90 for <code>lat</code> and between -180 and 180 for <code>lng</code>. This data will then be stored in the database and the map will display pins in places that nobody actually checked in from.</li>
+			<li> <strong>Proof:</strong> I used a simple <code>curl</code> request to place markers at the location (11,11). Clearly I was not at the geographic coordiate (11,11).
+			</li>
+			<li><img src="bad_loc_curl.png" alt="bad location curl request" height="25"></li>
+			<li> Now we see that pin on the map:</li>
+			<li><img src="bad_loc.png" alt="pin in africa" width="500"></li>
+			<li> <strong>Resolution:</strong> Unlike the last section, there is no clearcut solution to this vulnerability. One possible solution is to compare the login to all previous logins from that user, and if for instance the user cheked in at Vancouver at <code>3:00PM</code> and then checked in at Paris at <code>4:00PM</code> then we can be pretty sure that at least one of those is wrong. Furthermore, if the number comes in in a bad format (i.e. 11,11 instead of 42.433928,-90.233919), then we can be pretty sure this wasn't the automated location report.</li>
+			</ul>
+		</li>
+		<li><h1>3. Allows Users to View Other User Data</h1>
+			<ul>
+			<li> <strong>Affects:</strong> <code>GET /latest.json</code></li>
+			<li> <strong>Severity: Medium.</strong> The <code>/latest.json</code> implementation takes the user login name and checks to make sure that it is not undefined or null, and then makes a query with it. If the user specified the login name to be a query syntax that that returned all names except their own, then that user could hypothetically find out all of the names and checkin data for all others on the site. This is a huge breach of privacy and could cause other users to become afraid and stop using the Mapchat service.</li>
+			<li> <strong>Description:</strong> Lets users find (one at a time) the latest <code>checkin</code> complete with the name and location of the user who posted that log. If a user were to do this repeatedly, then she could could find out the names and locations of all the active users on the sight. The attack itself is done with a simple <code>curl</code> request where instead of specifying a simple username, the user specifies a query parameter to find all entries in the Mongo database with the login value not equal to their login name.</li>
+			<li> <strong>Proof:</strong> The <code>curl</code> request used to attack the site:</li>
+			<li><img src="privacy_curl.png" alt="privacy vulnerability curl attack" height="25"></li>
+			<li> And the result from that request:</li>
+			<li><img src="privacy.png" alt="privacy vulnerability result"  height="50"></li>
+			<li> <strong>Resolution:</strong> Luckily this too has a simple solution. It is unlikely (and possibly invalid) for a user to have the string <code>'{$ne: *}'</code> with any combination of spaces in their names. Therefore, a quick RegExp function to parse out any invalid combinations could sanitize the requests and make sure that no users can access any other users data. </li>
+			</ul>
+		</li>
+	</ul>
+	<br><hr><br>
+	<h3>Conclusions</h3>
+	<p> All said, the security for this weball is not awful. There are a few serious holes (most importantly that the site is vulnerable to XSS), but there are simple and well documented ways to prevent each of these problems. All three of the documented problems stem from a misguided trust, or naivity, towards user input. This means that the single largest takeaway from this analysis is that user input cannot be trusted. <em>Never ever trust user input.</em> This is an important lesson to learn, and one that many professionals and organizations have learned the hard way. Fixing these issues will push the Mapchat application a long way towards security, which in this case is very important as it is storing sensitive information such as names and locations.</p>
+</body>

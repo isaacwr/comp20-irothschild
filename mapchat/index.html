@@ -37,7 +37,7 @@
             xhr.open("POST", url, true);
             var params = "login=CherylLytle"
                          + "&lat=" + encodeURIComponent(myPos.lat())
-                         + "&lng=" + encodeURIComponent(myPos.lat())
+                         + "&lng=" + encodeURIComponent(myPos.lon())
                          + "&message=" + encodeURIComponent("Yayyy");
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhr.send(params);
